@@ -51,3 +51,52 @@ INNER JOIN staff on store.manager_staff_id = staff.staff_id
 INNER JOIN address on customer.address_id = address.address_id
 INNER JOIN city on address.city_id = city.city_id
 INNER JOIN country on city.country_id = country.country_id
+--ACT 6--
+SELECT count(*), rating FROM film
+GROUP BY rating
+--ACT 7--
+SELECT count(title) as "Cantidad de peliculas por categoria", c.name 
+from film f
+INNER JOIN film_category fc on fc.film_id = f.film_id
+INNER JOIN category c ON fc.category_id = c.category_id
+GROUP BY c.name
+--ACT 8--
+SELECT a.first_name, a.last_name, COUNT(fa.film_id) AS appearances
+FROM actor a
+JOIN film_actor fa ON a.actor_id = fa.actor_id
+GROUP BY a.actor_id
+ORDER BY appearances DESC
+LIMIT 10;
+--ACT 9
+SELECT
+   a.address,
+   ci.city,
+   co.country,
+   COUNT(i.inventory_id) AS total_inventory
+FROM inventory i
+JOIN store s ON i.store_id = s.store_id
+JOIN address a ON s.address_id = a.address_id
+JOIN city ci ON a.city_id = ci.city_id
+JOIN country co ON ci.country_id = co.country_id
+GROUP BY a.address, ci.city, co.country
+ORDER BY total_inventory DESC;
+--ACT 10--
+SELECT CONCAT(a.address, ', ', c.city, ', ', co.country) AS local_direccion, COUNT(DISTINCT i.film_id) AS cantidad_peliculas_distintas
+FROM store s
+JOIN inventory i ON s.store_id = i.store_id
+JOIN address a ON s.address_id = a.address_id
+JOIN city c ON a.city_id = c.city_id
+JOIN country co ON c.country_id = co.country_id
+GROUP BY local_direccion;
+--ACT 11--
+
+SELECT cat.name AS categoria, AVG(f.rental_rate) AS costo_promedio_alquiler
+FROM category cat
+JOIN film_category fc ON cat.category_id = fc.category_id
+JOIN film f ON fc.film_id = f.film_id
+JOIN inventory i ON f.film_id = i.film_id
+JOIN rental r ON i.inventory_id = r.inventory_id
+GROUP BY cat.name;
+
+--ACT 12--
+
