@@ -52,8 +52,7 @@ INNER JOIN address on customer.address_id = address.address_id
 INNER JOIN city on address.city_id = city.city_id
 INNER JOIN country on city.country_id = country.country_id
 --ACT 6--
-SELECT count(*), rating FROM film
-GROUP BY rating
+
 --ACT 7--
 SELECT count(title) as "Cantidad de peliculas por categoria", c.name 
 from film f
@@ -99,4 +98,80 @@ JOIN rental r ON i.inventory_id = r.inventory_id
 GROUP BY cat.name;
 
 --ACT 12--
-
+SELECT r.rental_date,
+	r.return_date,(julianday(r.return_date) - julianday(r.rental_date)) AS dias_alquiler,
+	f.rental_rate * (julianday(r.return_date) - julianday(r.rental_date)) as costo_total,
+	f.rental_rate as costo_por_dia
+FROM rental r
+join inventory i on r.inventory_id = i.inventory_id
+JOIN film f on i.film_id = f.film_id
+WHERE f.title = 'ALABAMA DEVIL'
+ORDER by r.rental_date
+--ACT 13--
+SELECT f.title AS nombre_pelicula,
+f.length AS duracion,
+c.name as categoria
+FROM film f
+JOIN film_category fc on fc.film_id = fc.film_id
+JOIN category c on fc.category_id = c.category_id
+order by f.length DESC;
+--ACT 14--
+SELECT f.title as nombre_pelicula,
+a.first_name as nombres_actores, count(a.actor_id) AS cantActor
+FROM film f
+join film_actor fc on f.film_id = fc.film_id
+JOIN actor a on a.actor_id = fc.actor_id
+WHERE f.title like 'W%'
+GROUP BY a.actor_id
+HAVING cantActor >= 5
+ORDER by cantActor ASC;
+--ACT 15--
+SELECT c.first_name as nombre_cliente,
+c.last_name as apellido_cliente,
+sum(p.amount) as total_pagado
+FROM customer c
+join payment p on c.customer_id = p.customer_id
+GROUP by c.customer_id, c.first_name
+ORDER BY total_pagado DESC;
+--ACT 16--
+SELECT f.title as nombre_pelicula,
+a.first_name as nombres_actores,
+f.length as duracion
+FROM film f
+join film_actor fc on f.film_id = fc.film_id
+JOIN actor a on a.actor_id = fc.actor_id
+WHERE duracion < 60
+ORDER by length ASC
+--ACT 17--
+SELECT c.last_name, a.address,c.city,co.country,r.rental_date,p.amount
+FROM customer c
+JOIN address a ON c.address_id = a.address_id
+JOIN city c ON a.city_id = c.city_id
+JOIN country co on c.country_id = co.country_id
+JOIN rental r on c.customer_id = r.customer_id
+JOIN payment p on r.rental_id = p.rental_id
+ORDER BY p.amount ASC
+--ACT 18--
+INSERT INTO actor(actor_id,first_name,last_name,last_update)
+VALUES(201,"Thomas","Avila","2025-04-24 11:54:32")
+--ACT 19--
+INSERT INTO actor(actor_id,first_name,last_name,last_update)
+VALUES (202,"Elsa","Pito","2025-04-24 12:05:42"), 
+(203,"Mike","Towers","2025-04-24 11:54:32")
+--ACT 20--
+UPDATE actor
+SET first_name = "Timmy", last_name = "Coll"
+WHERE actor_id = 201;
+UPDATE actor
+SET first_name = "Clarence", last_name = "Wendle"
+WHERE actor_id = 202;
+UPDATE actor
+SET first_name = "Maximiliano", last_name = "Avila"
+WHERE actor_id = 203;
+--ACT 21--
+DELETE FROM actor
+WHERE actor_id = 201;
+DELETE FROM actor
+WHERE actor_id = 202;
+DELETE FROM actor
+WHERE actor_id = 203;
