@@ -19,9 +19,10 @@ last_name varchar(45),
 FOREIGN KEY (game_id) REFERENCES games(game_id)
 );
 INSERT INTO client(game_id, first_name, last_name) VALUES
-(1, "Thomas", "Avila"),
-(2, "Dylan", "Aragon"),
-(3, "Santiago", "Gomez");
+(1, 'Thomas', 'Avila'),
+(2, 'Laura', 'Martinez'),
+(3, 'German', 'Garmendia');
+
 
 --Crear la tabla buys y sus relaciones con games y client.
 CREATE TABLE buys(
@@ -33,9 +34,9 @@ FOREIGN key (game_id) REFERENCES games(game_id)
 FOREIGN key (client_id) REFERENCES games(client_id)
 );
 INSERT INTO buys(game_id, client_id, payment_method) VALUES
-(1, 1, "Mercado pago"),
-(2, 2, "Efectivo"),
-(3, 3, "Tarjeta debito/credito");
+(1, 1, 'Tarjeta'),
+(2, 2, 'Paypal'),
+(3, 3, 'Mercado Pago');
 
 
 --Crear la tabla platform y sus relaciones con games y client.
@@ -48,6 +49,6 @@ FOREIGN KEY (game_id) REFERENCES games(game_id),
 FOREIGN KEY (client_id) REFERENCES client(client_id)
 );
 INSERT INTO platform(game_id, client_id, platform_name) VALUES
-(1, 1, "Playstation 4"),
-(2, 2, "PC"),
-(3, 3, "Playstation 5");
+(1, 1, 'PlayStation4'),
+(2, 2, 'PC'),
+(3, 3, 'PC');
