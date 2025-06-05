@@ -12,9 +12,10 @@ INSERT INTO games (name, category, price)VALUES
 ('Elden Ring','RPG de acción / Mundo abierto',42.99),
 ('Stardew Valley','Simulación / Agricultura / RPG',21.99),
 ('Call of Duty: Modern Warfare II','Shooter en primera persona (FPS)',19.99),
-('Among Us','Multijugador / Party Game / Deductivo',9.99);
-
-
+('Among Us','Multijugador / Party Game / Deductivo',9.99),
+("God of War","Acción y Aventura",79.99),
+("Minecraft","Aventura", 5.00),
+("Mortal Kombat","Lucha",35.97);
 --Crear la tabla client y relacionarlo con games.
 CREATE TABLE client(
 client_id smallint PRIMARY KEY,
