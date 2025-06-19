@@ -1,9 +1,37 @@
---Crear la tabla games.
-CREATE TABLE games(
-game_id smallint PRIMARY KEY,
-name varchar(50),
-category varchar(100),
-price NUMERIC(5, 2)
+-- crea las tablas games, client, buys y platform
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "client" (
+	"client_id"	INTEGER,
+	"game_id"	smallint NOT NULL,
+	"first_name"	varchar(45) NOT NULL,
+	"last_name"	varchar(45) NOT NULL,
+	FOREIGN KEY("game_id") REFERENCES "games"("game_id"),
+	PRIMARY KEY("client_id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "platform" (
+	"platform_id"	INTEGER,
+	"game_id"	smallint NOT NULL,
+	"client_id"	smallint NOT NULL,
+	"platform_name"	varchar(100) NOT NULL,
+	PRIMARY KEY("platform_id" AUTOINCREMENT),
+	FOREIGN KEY("client_id") REFERENCES "client"("client_id"),
+	FOREIGN KEY("game_id") REFERENCES "games"("game_id")
+);
+CREATE TABLE IF NOT EXISTS "buys" (
+	"buy_id"	INTEGER,
+	"game_id"	smallint NOT NULL,
+	"client_id"	smallint NOT NULL,
+	"payment_method"	varchar(100) NOT NULL,
+	PRIMARY KEY("buy_id" AUTOINCREMENT),
+	FOREIGN KEY("client_id") REFERENCES "client"("client_id"),
+	FOREIGN KEY("game_id") REFERENCES "games"("game_id")
+);
+CREATE TABLE IF NOT EXISTS "games" (
+	"game_id"	INTEGER,
+	"name"	varchar(50) NOT NULL,
+	"category"	varchar(100) NOT NULL,
+	"price"	NUMERIC(5, 2) NOT NULL,
+	PRIMARY KEY("game_id" AUTOINCREMENT)
 );
 INSERT INTO games (name, category, price)VALUES 
 ('Hollow knight','	Metroidvania / Plataformas de acción',79.99),
@@ -16,14 +44,7 @@ INSERT INTO games (name, category, price)VALUES
 ("God of War","Acción y Aventura",79.99),
 ("Minecraft","Aventura", 5.00),
 ("Mortal Kombat","Lucha",35.97);
---Crear la tabla client y relacionarlo con games.
-CREATE TABLE client(
-client_id smallint PRIMARY KEY,
-game_id smallint,
-first_name varchar(45),
-last_name varchar(45),
-FOREIGN KEY (game_id) REFERENCES games(game_id)
-);
+
 INSERT INTO client (game_id, first_name, last_name)VALUES 
 (1,'Thomas','Avila'),
 (2,'Dylan','Aragon'),
@@ -36,16 +57,6 @@ INSERT INTO client (game_id, first_name, last_name)VALUES
 (9,'Mary','Llusco'),
 (10,'Abril','Herbas');
 
-
---Crear la tabla buys y sus relaciones con games y client.
-CREATE TABLE buys(
-buy_id smallint PRIMARY key,
-game_id smallint,
-client_id smallint,
-payment_method varchar(100),
-FOREIGN key (game_id) REFERENCES games(game_id)
-FOREIGN key (client_id) REFERENCES games(client_id)
-);
 INSERT INTO buys(game_id, client_id, payment_method) VALUES
 (1, 1, 'Tarjeta'),
 (2, 2, 'Paypal'),
@@ -58,15 +69,6 @@ INSERT INTO buys(game_id, client_id, payment_method) VALUES
 (9,9,'Efectivo'),
 (10,10,'Paypal');
 
---Crear la tabla platform y sus relaciones con games y client.
-CREATE TABLE platform(
-platform_id smallint PRIMARY KEY,
-game_id smallint,
-client_id smallint,
-name_platform varchar(100),
-FOREIGN KEY (game_id) REFERENCES games(game_id),
-FOREIGN KEY (client_id) REFERENCES client(client_id)
-);
 INSERT INTO platform(game_id, client_id, platform_name) VALUES
 (1, 1, 'PlayStation 4'),
 (2, 2, 'PC'),
